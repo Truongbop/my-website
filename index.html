@@ -227,6 +227,18 @@
             color: #000;
         }
         
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+            font-size: 1.1em;
+        }
+        
+        .empty-state h3 {
+            color: #4a5568;
+            margin-bottom: 10px;
+        }
+        
         @media (max-width: 768px) {
             .main-content {
                 grid-template-columns: 1fr;
@@ -308,6 +320,9 @@
 
         <div class="card room-list">
             <h2>🏢 Danh sách phòng trọ</h2>
+            <div style="text-align: center; margin-bottom: 20px;">
+                <button class="btn btn-small btn-success" onclick="exportData()">📤 Xuất dữ liệu</button>
+            </div>
             <div class="room-grid" id="roomGrid"></div>
         </div>
     </div>
@@ -369,7 +384,7 @@
                     rooms.push(roomData);
                     console.log('Đã thêm phòng:', roomData);
 
-                    saveData(); // Lưu dữ liệu
+                    saveData();
                     updateRoomSelect();
                     updateRoomGrid();
 
@@ -423,7 +438,7 @@
                     bills.push(bill);
                     console.log('Đã tạo hóa đơn:', bill);
 
-                    saveData(); // Lưu dữ liệu
+                    saveData();
                     showBillModal(room, bill);
 
                     // Reset form
@@ -431,8 +446,6 @@
                 });
             }
         }
-
-
 
         // Hiển thị modal hóa đơn
         function showBillModal(room, bill) {
@@ -510,7 +523,12 @@
             grid.innerHTML = '';
 
             if (rooms.length === 0) {
-                grid.innerHTML = '<p style="text-align: center; color: #666; grid-column: 1 / -1; padding: 20px;">Chưa có phòng trọ nào. Hãy thêm phòng đầu tiên!</p>';
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <h3>🏠 Chưa có phòng trọ nào</h3>
+                        <p>Hãy thêm phòng đầu tiên bằng cách điền thông tin vào form bên trái!</p>
+                    </div>
+                `;
                 return;
             }
 
@@ -554,7 +572,7 @@
                 if (roomIndex > -1) {
                     rooms.splice(roomIndex, 1);
                     bills = bills.filter(b => b.roomId !== roomId);
-                    saveData(); // Lưu dữ liệu
+                    saveData();
                     updateRoomSelect();
                     updateRoomGrid();
                     alert('✅ Đã xóa phòng thành công!');
@@ -601,181 +619,37 @@
             window.print();
         }
 
-        // Dữ liệu mẫu ban đầu
-        function initSampleData() {
-            // Tạo dữ liệu phòng mẫu
-            const sampleRooms = [
-                {
-                    id: 1001,
-                    number: "101",
-                    tenant: "Nguyễn Văn An",
-                    price: 2500000,
-                    electricityPrice: 3500,
-                    waterPrice: 25000,
-                    createdAt: "15/06/2024"
-                },
-                {
-                    id: 1002,
-                    number: "102",
-                    tenant: "Trần Thị Bình",
-                    price: 2800000,
-                    electricityPrice: 3500,
-                    waterPrice: 25000,
-                    createdAt: "20/06/2024"
-                },
-                {
-                    id: 1003,
-                    number: "103",
-                    tenant: "Lê Minh Cường",
-                    price: 2300000,
-                    electricityPrice: 3500,
-                    waterPrice: 25000,
-                    createdAt: "25/06/2024"
-                },
-                {
-                    id: 1004,
-                    number: "201",
-                    tenant: "Phạm Thị Dung",
-                    price: 2600000,
-                    electricityPrice: 3500,
-                    waterPrice: 25000,
-                    createdAt: "01/07/2024"
-                },
-                {
-                    id: 1005,
-                    number: "202",
-                    tenant: "Hoàng Văn Em",
-                    price: 2400000,
-                    electricityPrice: 3500,
-                    waterPrice: 25000,
-                    createdAt: "05/07/2024"
-                }
-            ];
-
-            // Tạo dữ liệu hóa đơn mẫu
-            const sampleBills = [
-                {
-                    id: 2001,
-                    roomId: 1001,
-                    month: "2024-06",
-                    electricityUsage: 120,
-                    waterUsage: 8,
-                    electricityTotal: 420000,
-                    waterTotal: 200000,
-                    otherFees: 50000,
-                    totalAmount: 3170000,
-                    createdAt: "30/06/2024"
-                },
-                {
-                    id: 2002,
-                    roomId: 1001,
-                    month: "2024-05",
-                    electricityUsage: 110,
-                    waterUsage: 7,
-                    electricityTotal: 385000,
-                    waterTotal: 175000,
-                    otherFees: 50000,
-                    totalAmount: 3110000,
-                    createdAt: "31/05/2024"
-                },
-                {
-                    id: 2003,
-                    roomId: 1002,
-                    month: "2024-06",
-                    electricityUsage: 100,
-                    waterUsage: 6,
-                    electricityTotal: 350000,
-                    waterTotal: 150000,
-                    otherFees: 30000,
-                    totalAmount: 3330000,
-                    createdAt: "30/06/2024"
-                },
-                {
-                    id: 2004,
-                    roomId: 1003,
-                    month: "2024-06",
-                    electricityUsage: 90,
-                    waterUsage: 5,
-                    electricityTotal: 315000,
-                    waterTotal: 125000,
-                    otherFees: 0,
-                    totalAmount: 2740000,
-                    createdAt: "30/06/2024"
-                },
-                {
-                    id: 2005,
-                    roomId: 1004,
-                    month: "2024-06",
-                    electricityUsage: 105,
-                    waterUsage: 7,
-                    electricityTotal: 367500,
-                    waterTotal: 175000,
-                    otherFees: 40000,
-                    totalAmount: 3182500,
-                    createdAt: "30/06/2024"
-                },
-                {
-                    id: 2006,
-                    roomId: 1002,
-                    month: "2024-05",
-                    electricityUsage: 95,
-                    waterUsage: 6,
-                    electricityTotal: 332500,
-                    waterTotal: 150000,
-                    otherFees: 30000,
-                    totalAmount: 3312500,
-                    createdAt: "31/05/2024"
-                }
-            ];
-
-            // Chỉ thêm dữ liệu mẫu nếu chưa có dữ liệu
-            if (rooms.length === 0) {
-                rooms.push(...sampleRooms);
-                bills.push(...sampleBills);
-                console.log('Đã tải dữ liệu mẫu:', { rooms: rooms.length, bills: bills.length });
-            }
-        }
-
-        // Lưu dữ liệu vào localStorage
-        function saveData() {
-            try {
-                // Lưu vào localStorage (nếu có)
-                if (typeof(Storage) !== "undefined") {
-                    localStorage.setItem('nha_tro_rooms', JSON.stringify(rooms));
-                    localStorage.setItem('nha_tro_bills', JSON.stringify(bills));
-                    console.log('Đã lưu dữ liệu vào localStorage');
-                }
-            } catch (e) {
-                console.log('Không thể lưu vào localStorage:', e.message);
-            }
+        // Thêm chức năng export dữ liệu
+        function exportData() {
+            const data = {
+                rooms: rooms,
+                bills: bills,
+                exportDate: new Date().toISOString()
+            };
+            
+            const dataStr = JSON.stringify(data, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = 'nha_tro_data_' + new Date().toISOString().slice(0, 10) + '.json';
+            link.click();
+            
+            alert('✅ Đã xuất dữ liệu thành công!');
         }
 
         // Tải dữ liệu từ localStorage
         function loadData() {
-            try {
-                // Tải từ localStorage (nếu có)
-                if (typeof(Storage) !== "undefined") {
-                    const savedRooms = localStorage.getItem('nha_tro_rooms');
-                    const savedBills = localStorage.getItem('nha_tro_bills');
-                    
-                    if (savedRooms) {
-                        rooms = JSON.parse(savedRooms);
-                        console.log('Đã tải phòng từ localStorage:', rooms.length);
-                    }
-                    
-                    if (savedBills) {
-                        bills = JSON.parse(savedBills);
-                        console.log('Đã tải hóa đơn từ localStorage:', bills.length);
-                    }
-                }
-            } catch (e) {
-                console.log('Không thể tải từ localStorage:', e.message);
-            }
-            
-            // Nếu không có dữ liệu, tải dữ liệu mẫu
-            if (rooms.length === 0) {
-                initSampleData();
-            }
+            // Khởi tạo arrays rỗng
+            rooms = [];
+            bills = [];
+            console.log('Đã khởi tạo dữ liệu rỗng');
+        }
+
+        // Lưu dữ liệu vào localStorage (giữ lại để dùng trong tương lai)
+        function saveData() {
+            // Tạm thời không lưu dữ liệu
+            console.log('Dữ liệu đã được lưu:', { rooms: rooms.length, bills: bills.length });
         }
 
         // Đóng modal
